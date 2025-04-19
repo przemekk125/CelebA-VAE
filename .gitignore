@@ -1,0 +1,60 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*.so
+*.pyd
+
+# Virtual environment
+.env/
+.venv/
+env/
+venv/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Data files
+data/
+*.csv
+*.tsv
+*.h5
+*.hdf5
+*.npz
+*.npy
+*.zip
+
+# Model files and logs
+*.ckpt
+*.ckpt.*
+*.pb
+*.pbtxt
+*.tflite
+*.log
+logs/
+
+# TensorBoard and training artifacts
+events.out.tfevents.*
+
+# Kaggle-specific
+kaggle.json
+
+# VSCode and PyCharm settings
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Outputs and plots
+*.png
+*.jpg
+*.jpeg
+*.pdf
+outputs/
+
+# Test files
+*test*
+
+# TODO
+*TODO*
