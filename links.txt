@@ -1,0 +1,11 @@
+https://www.kaggle.com/code/averkij/variational-autoencoder-and-faces-generation/notebook#Building-simple-autoencoder
+https://github.com/noctrog/conv-vae/tree/master
+https://github.com/yzwxx/vae-celebA/tree/master
+https://www.tensorflow.org/tutorials/generative/cvae?utm_source=chatgpt.com#load_the_mnist_dataset
+https://www.tensorflow.org/guide/keras/making_new_layers_and_models_via_subclassing#putting_it_all_together_an_end-to-end_example
+https://arxiv.org/pdf/1906.02691
+https://www.geeksforgeeks.org/convolutional-variational-autoencoder-in-tensorflow/
+
+
+IMPORTANTE
+https://youtu.be/mmQ4TTa0LSo?feature=shared
