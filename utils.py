@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import tensorflow as tf
+import matplotlib as plt
 
 def load_partition_csv(csv_path: str) -> pd.DataFrame:
     try:
@@ -51,3 +52,20 @@ def make_image_dataset(filepaths: list,img_size: tuple[int, int] = (128,128),
     ds = ds.batch(batch_size,drop_remainder=True)
     ds = ds.prefetch(tf.data.AUTOTUNE)
     return ds
+
+def plotHistory(history,validation=False):
+    fig,axes = plt.subplots(1,2,figsize=(12,5))
+    axes[0].plot(history.history['loss'],label='training loss')
+    if validation: axes[0].plot(history.history['val_loss'],label='validation loss')
+    axes[0].set_xlabel("Epoch")
+    axes[0].set_ylabel("Loss")
+    axes[0].legend()
+
+    axes[1].plot(history.history['loss'],label='training loss')
+    if validation: axes[1].plot(history.history['val_loss'],label='validation loss')
+    axes[1].set_xlabel("Epoch")
+    axes[1].set_ylabel("Loss")
+    axes[1].set_yscale("log")
+    axes[1].legend()
+
+    fig.show()
