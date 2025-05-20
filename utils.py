@@ -2,6 +2,8 @@ import os
 import pandas as pd
 import tensorflow as tf
 import matplotlib as plt
+import cv2
+import numpy as np
 
 def load_partition_csv(csv_path: str) -> pd.DataFrame:
     try:
@@ -27,29 +29,37 @@ def build_file_lists(df: pd.DataFrame, image_dir: str) -> tuple[list, list, list
 
     return train_files, val_files, test_files
 
-def make_image_dataset(filepaths: list,img_size: tuple[int, int] = (128,128),
-    batch_size: int = 64,shuffle: bool = False,buffer_size: int = 10000) -> tf.data.Dataset:
-    """
-    Returns a tf.data.Dataset yielding batches of normalized images.
-    """
+def make_image_dataset(filepaths, img_size=(64, 64), batch_size=64, shuffle=False, buffer_size=10000):
     ds = tf.data.Dataset.from_tensor_slices(filepaths)
     if shuffle:
         ds = ds.shuffle(buffer_size)
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")    
+    def detect_and_crop_face(filepath, scale=1.2, img_size=img_size):
+        img_bgr = tf.io.read_file(filepath)
+        img_bgr = tf.io.decode_jpeg(img_bgr, channels=3)
+        def _detect_and_crop(img, scale):
+            faces = face_cascade.detectMultiScale(img, scaleFactor=1.1, minNeighbors=5)
+            if len(faces) == 0:
+                # Return a dummy image and a flag (0 = no face)
+                return np.zeros((*img_size, 3), dtype=np.uint8), np.int64(0)
+            x, y, w, h = faces[0]
+            cx, cy = x + w // 2, y + h // 2
+            nw, nh = int(w * scale), int(h * scale)
+            nx, ny = max(cx - nw // 2, 0), max(cy - nh // 2, 0)
+            nx2, ny2 = min(nx + nw, img.shape[1]), min(ny + nh, img.shape[0])
+            cropped = img[ny:ny2, nx:nx2]
+            cropped_resized = cv2.resize(cropped, img_size)
+            return cropped_resized.astype(np.uint8), np.int64(1)
+        cropped, found = tf.numpy_function(_detect_and_crop, [img_bgr, scale], [tf.uint8, tf.int64])
+        cropped.set_shape([img_size[0], img_size[1], 3])
+        found.set_shape([])
+        cropped = tf.cast(cropped, tf.float32) / 255.0
+        return cropped, found
 
-    def _load_and_preprocess(path,img_size=img_size):
-        # Read raw bytes
-        raw = tf.io.read_file(path)
-        # Decode JPEG, force RGB
-        img = tf.image.decode_jpeg(raw, channels=3)
-        # Resize with bilinear interpolation
-        img = tf.image.resize(img, img_size)
-        # Normalize to [0,1]
-        img = tf.cast(img, tf.float32) / 255.0
-        return img
-
-    # Parallelize map and prefetch
-    ds = ds.map(_load_and_preprocess, num_parallel_calls=tf.data.AUTOTUNE)
-    ds = ds.batch(batch_size,drop_remainder=True)
+    ds = ds.map(detect_and_crop_face, num_parallel_calls=tf.data.AUTOTUNE)
+    ds = ds.filter(lambda img, found: found > 0)
+    ds = ds.map(lambda img, found: img)
+    ds = ds.batch(batch_size)
     ds = ds.prefetch(tf.data.AUTOTUNE)
     return ds
 
