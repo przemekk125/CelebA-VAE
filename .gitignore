@@ -22,6 +22,7 @@ data/
 *.npz
 *.npy
 *.zip
+*.txt
 
 # Model files and logs
 *.ckpt
