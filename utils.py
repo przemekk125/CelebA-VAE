@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import tensorflow as tf
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import cv2
 import numpy as np
 
@@ -77,5 +77,3 @@ def plotHistory(history,validation=False):
     axes[1].set_ylabel("Loss")
     axes[1].set_yscale("log")
     axes[1].legend()
-
-    fig.show()
