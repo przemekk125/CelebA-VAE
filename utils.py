@@ -1,8 +1,5 @@
-import os
-import pandas as pd
 import tensorflow as tf
 import matplotlib.pyplot as plt
-import cv2
 import numpy as np
 
 def make_image_dataset(df,data_path="../data/img_align_celeba/img_align_celeba/",img_size = (64,64),
