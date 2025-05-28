@@ -1,8 +1,8 @@
 # 🎭 Variational Autoencoder for Facial Representation Learning (CelebA)
 
-This repository contains the code and documentation for my final project in Machine Learning. The project focuses on building a **Variational Autoencoder (VAE)** to learn latent representations of facial features using the [CelebA dataset](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset).
+This repository contains the code and documentation for my final project for Machine Learning II class. The project focuses on building a **Variational Autoencoder (VAE)** to learn latent representations of facial features using the [CelebA dataset](https://www.kaggle.com/datasets/jessicali9530/celeba-dataset).
 
-By training a VAE on this dataset, the model aims to capture complex facial attributes such as pose, expression, hairstyle, and more, enabling tasks like face generation and attribute manipulation.
+By training a VAE on this dataset, the model aims to capture complex facial attributes such as expression, hairstyle, and more, enabling tasks like face generation and attribute manipulation.
 
 ---
 
@@ -21,10 +21,10 @@ By training a VAE on this dataset, the model aims to capture complex facial attr
 
 - Implementation of a VAE architecture using **TensorFlow**.
 - Data preprocessing tailored for the CelebA dataset.
-- Training pipeline with customizable parameters.
 - Visualization tools for:
   - Reconstructed images.
   - Latent space interpolations.
   - Attribute manipulations.
+  - New face generation
 
 ---
